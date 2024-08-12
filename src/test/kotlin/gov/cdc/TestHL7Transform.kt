@@ -13,7 +13,9 @@ class TestHL7Transform {
         val message = this::class.java.getResource("/testMessage.txt").readText()
         val gson = GsonBuilder().create()
 
-        val xformer = HL7JsonTransformer.getTransformerWithResource(message, "PhinGuideProfile.json")
+        val xformer = HL7JsonTransformer.getTransformerWithResource(message,
+            "PhinProfile.json",
+            "DefaultFieldsSimple.json")
         val fullHL7 = xformer.transformMessage()
         println(gson.toJson(fullHL7))
         assertTrue(fullHL7.get("MSH").asJsonObject
@@ -24,7 +26,7 @@ class TestHL7Transform {
 
     @Test
     fun loadFieldDef() {
-        val content = this::class.java.getResource("/DefaultFieldsProfile.json").readText()
+        val content = this::class.java.getResource("/DefaultFieldsSimple.json").readText()
 
         val gson = Gson()
 

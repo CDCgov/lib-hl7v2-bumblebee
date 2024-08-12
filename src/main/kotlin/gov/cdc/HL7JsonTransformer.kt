@@ -14,18 +14,29 @@ class HL7JsonTransformer(val profile: Profile, val fieldProfile: Profile, val hl
         fun getTransformerWithResource(
             message: String,
             profileFilename: String,
-            fieldProfileFileName: String = "/DefaultFieldsProfileSimple.json"
+            fieldProfileFileName: String = "DefaultFieldsProfileSimple.json"
         ): HL7JsonTransformer {
-            val profContent = HL7JsonTransformer::class.java.getResource("/$profileFilename").readText()
+
+            val profContent = loadContent(profileFilename)
             val profile: Profile = gson.fromJson(profContent, Profile::class.java)
 
-            val fieldProfContent = HL7JsonTransformer::class.java.getResource(fieldProfileFileName).readText()
+            val fieldProfContent = loadContent(fieldProfileFileName)
             val fieldProfile: Profile = gson.fromJson(fieldProfContent, Profile::class.java)
 
             val parser = HL7ParseUtils.getParser(message, profileFilename)
             return HL7JsonTransformer(profile, fieldProfile, parser)
         }
+        private fun loadContent(filePath: String) : String {
+            val pathToContent = if (filePath.startsWith("/")) {
+                filePath.substringAfter("/")
+            } else {
+                filePath
+            }
+            return HL7JsonTransformer::class.java.getResource("/$pathToContent").readText()
+        }
     }
+
+
 
     fun transformMessage(): JsonObject {
         val fullHL7 = JsonObject()
@@ -158,7 +169,7 @@ class HL7JsonTransformer(val profile: Profile, val fieldProfile: Profile, val hl
             }
     }
 
-    fun JsonObject.addValueOrNull(value: String?, name: String) {
+    private fun JsonObject.addValueOrNull(value: String?, name: String) {
         if (!value.isNullOrEmpty())
             this.addProperty(name.normalize(), value)
         else this.add(name.normalize(),JsonNull.INSTANCE)

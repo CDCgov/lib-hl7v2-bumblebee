@@ -1,6 +1,6 @@
 {
     "segmentFields": {
-        "HD": [
+        "HD" : [
             {
                 "fieldNumber": 1,
                 "name": "Namespace ID",
@@ -64,7 +64,7 @@
                 "notes": ""
             }
         ],
-        "PT": [
+        "PT" : [
             {
                 "fieldNumber": 1,
                 "name": "Processing ID",
@@ -118,7 +118,7 @@
                 "notes": ""
             }
         ],
-        "CE": [
+        "CE" : [
             {
                 "fieldNumber": 1,
                 "name": "Identifier",
@@ -272,7 +272,7 @@
                 "notes": ""
             }
         ],
-        "EI": [
+        "EI" : [
             {
                 "fieldNumber": 1,
                 "name": "Entity Identifier",
@@ -314,7 +314,7 @@
                 "notes": ""
             }
         ],
-        "CX": [
+        "CX" : [
             {
                 "fieldNumber": 1,
                 "name": "ID Number",
@@ -681,7 +681,7 @@
             },
             {
                 "fieldNumber": 13,
-                "name": "Effeective Date",
+                "name": "Effective Date",
                 "dataType": "TS",
                 "maxLength": "26",
                 "usage": "O",
@@ -848,42 +848,6 @@
                 "notes": ""
             }
         ],
-        "ID": [
-            {
-                "fieldNumber": 1,
-                "name": "Coded Value for HL7-Defined Table",
-                "dataType": "ST",
-                "maxLength": "199",
-                "usage": "R",
-                "cardinality": "[1..1]",
-                "conformance": "",
-                "notes": ""
-            }
-        ],
-        "IS": [
-            {
-                "fieldNumber": 1,
-                "name": "Coded Value for HL7-Defnited Table",
-                "dataType": "ST",
-                "maxLength": "20",
-                "usage": "R",
-                "cardinality": "[1..1]",
-                "conformance": "",
-                "notes": ""
-            }
-        ],
-        "SI": [
-            {
-                "fieldNumber": 1,
-                "name": "Sequence ID",
-                "dataType": "NM",
-                "maxLength": "4",
-                "usage": "R",
-                "cardinality": "[1..1]",
-                "conformance": "",
-                "notes": ": A non-negative integer in the form of a NM field"
-            }
-        ],
         "XON": [
             {
                 "fieldNumber": 1,
@@ -976,6 +940,195 @@
                 "conformance": ""
             }
 
+        ],
+        "SN" : [
+            {
+                "fieldNumber": 1,
+                "name": "Comparator",
+                "dataType": "ST",
+                "maxLength": "2",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": ""
+            },
+            {
+                "fieldNumber": 2,
+                "name": "Number1",
+                "dataType": "NM",
+                "maxLength": "15",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": ""
+            },
+            {
+                "fieldNumber": 3,
+                "name": "Separator",
+                "dataType": "ST",
+                "maxLength": "1",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": ""
+            },
+            {
+                "fieldNumber": 4,
+                "name": "Number2",
+                "dataType": "NM",
+                "maxLength": "15",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": ""
+            }
+        ],
+        "EIP": [
+            {
+                "fieldNumber": 1,
+                "name": "Placer Assigned Identifier",
+                "dataType": "EI",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 2,
+                "name": "FIller Assigned Identifier",
+                "dataType": "EI",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            }
+        ],
+        "RPT": [
+            {
+                "fieldNumber": 1,
+                "name": "Repeat Pattern Code",
+                "dataType": "CWE",
+                "usage": "R",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 2,
+                "name": "Calendar Alignment",
+                "dataType": "ID",
+                "maxLength": 2,
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 3,
+                "name": "Phase Range Begin VAlue",
+                "dataType": "NM",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 4,
+                "name": "Phase Range End Value",
+                "dataType": "NM",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 5,
+                "name": "Period Quantity",
+                "dataType": "NM",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 6,
+                "name": "Period Units",
+                "dataType": "CWE",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 7,
+                "name": "Institution Specified Time",
+                "dataType": "ID",
+                "maxLength": 1,
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 8,
+                "name": "Event",
+                "dataType": "ID",
+                "maxLength": 3,
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 9,
+                "name": "Event Offset Quantity",
+                "dataType": "NM",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 10,
+                "name": "Event Offset Units",
+                "dataType": "CWE",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 11,
+                "name": "General Timing Specification",
+                "dataType": "GTS",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            }
+        ],
+        "CQ" : [
+            {
+                "fieldNumber": 1,
+                "name": "Quantity",
+                "dataType": "NM",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 2,
+                "name": "Units",
+                "dataType": "CWE",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            }
+        ],
+        "DR" : [
+            {
+                "fieldNumber": 1,
+                "name": "Range Start Date/Time",
+                "dataType": "DTM",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },{
+                "fieldNumber": 2,
+                "name": "Range End Date/Time",
+                "dataType": "DTM",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            }
         ],
         "XCN": [
             {
@@ -1180,7 +1333,7 @@
                 "notes": ""
             }
         ],
-        "FC": [
+        "FC" : [
             {
                 "fieldNumber": 1,
                 "name": "FInancial Class Code",
@@ -1199,7 +1352,7 @@
                 "notes": ""
             }
         ],
-        "PL": [
+        "PL" : [
             {
                 "fieldNumber": 1,
                 "name": "Point of Care",
@@ -1336,7 +1489,7 @@
                 "notes": ""
             }
         ],
-        "FN": [
+        "FN" : [
             {
                 "fieldNumber": 1,
                 "name": "Surname",
@@ -1374,6 +1527,96 @@
                 "name": "Surname From Partner/Spouse",
                 "dataType": "ST",
                 "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            }
+        ],
+        "CNE": [
+            {
+                "fieldNumber": 1,
+                "name": "Identifier",
+                "dataType": "ST",
+                "maxLength": "20",
+                "usage": "RE",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 2,
+                "name": "Text",
+                "dataType": "ST",
+                "maxLength": "199",
+                "usage": "RE",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 3,
+                "name": "Name of Coding System",
+                "dataType": "ID",
+                "maxLength": "199",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 4,
+                "name": "Alternate Identifier",
+                "dataType": "ST",
+                "maxLength": "20",
+                "usage": "RE",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 5,
+                "name": "Alternate Text",
+                "dataType": "ST",
+                "maxLength": "199",
+                "usage": "RE",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 6,
+                "name": "Name of Alternate Coding System",
+                "dataType": "ID",
+                "maxLength": "199",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 7,
+                "name": "Coding System Version ID",
+                "dataType": "ST",
+                "maxLength": "10",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 8,
+                "name": "Alternate Coding System Version ID",
+                "dataType": "ST",
+                "maxLength": "10",
+                "usage": "O",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 9,
+                "name": "Original Text",
+                "dataType": "ST",
+                "maxLength": "199",
+                "usage": "RE",
                 "cardinality": "[0..1]",
                 "conformance": "",
                 "notes": ""
