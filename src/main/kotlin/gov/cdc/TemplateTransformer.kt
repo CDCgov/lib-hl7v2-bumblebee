@@ -32,7 +32,7 @@ class TemplateTransformer(private val template: JsonObject, private val profile:
 
         }
         val INDEXED_VALUE = "\\(([0-9]+)\\)$".toRegex()
-        val DO_NOT_CONCATENATE = "DONT"
+        const val DO_NOT_CONCATENATE = "DONT"
     }
 
     fun transformMessage(hl7Message: String, concatArrayElements: String = DO_NOT_CONCATENATE): String {
@@ -43,7 +43,6 @@ class TemplateTransformer(private val template: JsonObject, private val profile:
     }
 
 
-///Private Methods....
     private fun createJsonTree(bline: List<String>, fromAttr: String, leaf: JsonArray):JsonElement  {
         val retJson = JsonObject()
         if (bline.size == 1)
@@ -95,7 +94,7 @@ class TemplateTransformer(private val template: JsonObject, private val profile:
             //Check if there's index at then end ... => xxx(9)
             INDEXED_VALUE.find(prim)?.value.let {
                 if (it != null) {
-                    queryPath = prim.substring(0..prim.length - it.length - 1)
+                    queryPath = prim.substring(0 until prim.length - it.length)
                     resultIndex = it.substring(1, it.length-1).toInt()
                 }
             }
@@ -103,7 +102,7 @@ class TemplateTransformer(private val template: JsonObject, private val profile:
             if (resultIndex >= 0)
                 newValue = try { newValue?.slice(resultIndex..resultIndex)  }
                             catch (e: IndexOutOfBoundsException) { null }
-            if (newValue != null && newValue.size >0 ) {
+            if (!newValue.isNullOrEmpty()) {
                 val arrayValues = JsonArray()
                 newValue.forEachIndexed { i, it ->
                     if (parent!!.isJsonObject) {
@@ -208,19 +207,5 @@ class TemplateTransformer(private val template: JsonObject, private val profile:
     }
 }
 
-object test {
-    @JvmStatic
-    fun main(args: Array<String>) {
-        val regex = "\\(([0-9]+)\\)$".toRegex()
-        val testString = "OBX[@3.1='PLT631||PLT656']-5.1(10)"
-        regex.find(testString)?.value.let {
-            if (it != null) {
-                println(it)
-                println(it.substring(1, it.length-1).toInt())
-                println(testString.substring(0..testString.length-it.length-1))
-            }
 
-        }
-    }
-}
 

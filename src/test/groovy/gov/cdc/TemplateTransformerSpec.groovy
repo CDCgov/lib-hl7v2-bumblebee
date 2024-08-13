@@ -1,9 +1,8 @@
 package gov.cdc
 
-import gov.cdc.TemplateTransformer
-import groovy.json.JsonSlurper
 
-import spock.lang.*
+import groovy.json.JsonSlurper
+import spock.lang.Specification
 /**
  *
  *
@@ -35,8 +34,11 @@ class TemplateTransformerSpec extends Specification {
           def bumblebee = TemplateTransformer.getTransformerWithResource("/exampleTemplate.json", "/BasicProfile.json")
           def message = getClass().getResource("/exampleHL7Message.txt").text
           def newMessage = bumblebee.transformMessage(message, "DONT")
-
-          print(newMessage)
+          println("exampleTemplate")
+          println("=============================")
+          println(newMessage)
+          println("++++++++++++++++++++++++++++++")
+          println()
         then:
             def jsonSlurper = new JsonSlurper()
             def object = jsonSlurper.parseText(newMessage)
@@ -64,13 +66,14 @@ class TemplateTransformerSpec extends Specification {
         def bumblebee = TemplateTransformer.getTransformerWithResource("/simpleTemplate.json", "/BasicProfile.json")
         def message = getClass().getResource("/exampleHL7Message.txt").text
         def newMessage = bumblebee.transformMessage(message, "DONT")
-
-        print(newMessage)
+        println("simpleTemplate")
+        println("===============================")
+        println(newMessage)
+        println("+++++++++++++++++++++++++++++++")
+        println()
         then:
         def jsonSlurper = new JsonSlurper()
         def object = jsonSlurper.parseText(newMessage)
-//        print(object)
-//            assert object.emptyValue == ""
     }
 
     def "test flattening dhqp"() {
@@ -78,8 +81,11 @@ class TemplateTransformerSpec extends Specification {
         def bumblebee = TemplateTransformer.getTransformerWithResource("/dhqpFlat.json", "/BasicProfile.json")
         def message = getClass().getResource("/exampleConcatNotes.txt").text
         def newMessage = bumblebee.transformMessage(message, "\n")
-
-        print(newMessage)
+        println("dhqpFlat")
+        println("==========================================")
+        println(newMessage)
+        println("+++++++++++++++++++++++++++++++++++++++++++")
+        println()
         then:
         def jsonSlurper = new JsonSlurper()
         def object = jsonSlurper.parseText(newMessage)
@@ -90,8 +96,11 @@ class TemplateTransformerSpec extends Specification {
         def bumblebee = TemplateTransformer.getTransformerWithResource("/exampleTemplateNoMatch.json", "/BasicProfile.json")
         def message = getClass().getResource("/exampleHL7Message.txt").text
         def newMessage = bumblebee.transformMessage(message, "DONT")
-
-        print(newMessage)
+        println("exampleTemplateNoMatch")
+        println("===================================")
+        println(newMessage)
+        println("+++++++++++++++++++++++++++++++++++")
+        println()
         then:
         def jsonSlurper = new JsonSlurper()
         def object = jsonSlurper.parseText(newMessage)
@@ -106,8 +115,10 @@ class TemplateTransformerSpec extends Specification {
         def bumblebee = TemplateTransformer.getTransformerWithResource("/covidExample.json", "/BasicProfile.json")
         def message = getClass().getResource("/testMessage.txt").text
         def newMessage = bumblebee.transformMessage(message, "DONT")
-
-        print(newMessage)
+        println("covidExample")
+        println("=================================")
+        println(newMessage)
+        println("+++++++++++++++++++++++++++++++++")
         then:
         def jsonSlurper = new JsonSlurper()
         def object = jsonSlurper.parseText(newMessage)

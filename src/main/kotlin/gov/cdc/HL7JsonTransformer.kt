@@ -6,9 +6,9 @@ import gov.cdc.StringUtils.Companion.normalize
 import gov.cdc.hl7.model.HL7Hierarchy
 
 
-class HL7JsonTransformer(val profile: Profile, val fieldProfile: Profile, val hl7Parser: HL7ParseUtils) {
+class HL7JsonTransformer(private val profile: Profile, private val fieldProfile: Profile, private val hl7Parser: HL7ParseUtils) {
     companion object {
-        val gson = GsonBuilder().serializeNulls().create()
+        private val gson: Gson = GsonBuilder().serializeNulls().create()
         //Factory Method
         @JvmStatic
         fun getTransformerWithResource(
@@ -107,7 +107,7 @@ class HL7JsonTransformer(val profile: Profile, val fieldProfile: Profile, val hl
                 else fieldRepeat.forEach { fieldRepeatItem ->
                     val compJsonObj = JsonObject()
                     val compArray = fieldRepeatItem.split("^")
-                    var compHasValue:Boolean = false
+                    var compHasValue = false
                     components.forEach { component ->
                         val compVal = getValueFromMessage(compArray, component.fieldNumber -1 )
                         compHasValue = compHasValue || (!compVal.isNullOrEmpty() )
@@ -116,7 +116,7 @@ class HL7JsonTransformer(val profile: Profile, val fieldProfile: Profile, val hl
                         if (!subComponents.isNullOrEmpty()) {
                             val subCompJsonObj = JsonObject()
                             val subCompArray = compVal?.split("&")
-                            var subHasValue: Boolean = false
+                            var subHasValue = false
                             subComponents.forEach { subComp ->
                                 val subCompVal = getValueFromMessage(subCompArray, subComp.fieldNumber - 1)
                                 subCompJsonObj.addValueOrNull(subCompVal, subComp.name)

@@ -1,9 +1,30 @@
 # HL7v2 Bumblebee
-
+The lib-hl7v2-bumblebee library takes an HL7 v2.x message and transforms it into a JSON tree.
 
 ## Overview
+The design of this library had the following goals:
+- Provide a generic HL7 v.2.x transformer that can work for any message.
+- Be customizable for different message types and use cases.
+- Reduce the need for a consumer of the output JSON to be an HL7 SME, particularly by avoiding segment-field notation in the output.
+- Be performant with low memory footprint.
 
+The first three needs are met through the use of JSON configuration files. 
 
+## Classes
+HL7JsonTransformer
+Profile
+TemplateTransformer
+
+## Methods
+
+## Configuration Files
+HL7 message profile
+HL7 data types profile
+
+## Dependencies
+This library has a dependency on another CDC DEX HL7 library, hl7-pet. The hl7-pet library is available through Maven Central or the public GitHub repository at https://github.com/CDCgov/hl7-pet.
+
+To achieve these goals, the library uses configuration files to determine the input and output structures.
 
 ## Related documents
 
