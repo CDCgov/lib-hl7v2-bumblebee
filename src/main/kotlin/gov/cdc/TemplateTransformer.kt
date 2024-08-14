@@ -14,7 +14,6 @@ class TemplateTransformer(private val template: JsonObject, private val profile:
         fun getTransformerWithResource(configFileName: String, profileFileName: String): TemplateTransformer {
             val templateFile = TemplateTransformer::class.java.getResource(configFileName).readText()
             val jsonbody = JsonParser.parseString(templateFile).asJsonObject
-            //I don't know how to read this with Gson - set the registerModule(DefaultScalaModule())
             val mapper = ObjectMapper()
             mapper.registerModule(DefaultScalaModule())
             val profileFile = TemplateTransformer::class.java.getResource(profileFileName).readText()

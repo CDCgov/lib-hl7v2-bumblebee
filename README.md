@@ -8,23 +8,244 @@ The design of this library had the following goals:
 - Reduce the need for a consumer of the output JSON to be an HL7 SME, particularly by avoiding segment-field notation in the output.
 - Be performant with low memory footprint.
 
-The first three needs are met through the use of JSON configuration files. 
+The performance needs are met through the use of high-efficiency Kotlin and Groovy code.
+For customization, the library requires configuration files that specify the input and output data structures.
 
-## Classes
-HL7JsonTransformer
-Profile
-TemplateTransformer
+## Usage
+The library provides two main classes that allow for two different means of transformation:
+HL7JsonTransformer, which will output a JSON tree that mimics the structure of the input HL7 message,
+and TemplateTransformer, which will produce output according to the format in the provided JSON template.
 
-## Methods
+### HL7JsonTransformer
+The HL7JsonTransformer class requires two configuration files: one to specify the input HL7 message structure 
+and another to specify the structure of each HL7 data type. The output is then inferred from the message structure,
+generating a JSON tree that uses the name of each field or component as its key. 
+This output is a rich descriptive account of the data that was input.
 
-## Configuration Files
+#### Configuration Files
+1. HL7 message profile
+
+The first configuration file required outlines the HL7 message structure.
+It has two main sections: "segmentDefinition", which lists the segments, their relationships, and their cardinality;
+and "segmentFields", which gives the details of those field in the included segments that should be included in the output.
+Here is an abbreviated example, which shows the complete "segmentDefinition" section
+for an ORU message type and the first five fields of the MSH in "segmentFields":
+```json
+{
+  "segmentDefinition": {
+    "MSH": {
+      "cardinality": "[1..1]",
+      "children": {
+        "SFT": {
+          "cardinality": "[0..*]"
+        },
+        "PID": {
+          "cardinality": "[1..1]",
+          "children": {
+            "PD1": {
+              "cardinality": "[0..1]"
+            },
+            "NTE": {
+              "cardinality": "[0..*]"
+            },
+            "NK1": {
+              "cardinality": "[0..*]"
+            },
+            "PV1": {
+              "cardinality": "[1..1]"
+            },
+            "PV2": {
+              "cardinality": "[0..1]"
+            }
+          }
+        },
+        "ORC": {
+          "cardinality": "[0..1]"
+        },
+        "OBR": {
+          "cardinality": "[1..*]",
+          "children": {
+            "TQ1": {
+              "cardinality": "[0..1]"
+            },
+            "OBX": {
+              "cardinality": "[0..*]",
+              "children": {
+                "NTE": {
+                  "cardinality": "[0..*]"
+                }
+              }
+            },
+            "SPM": {
+              "cardinality": "[0..*]",
+              "children": {
+                "NTE": {
+                  "cardinality": "[0..*]"
+                }
+              }
+            },
+            "NTE": {
+              "cardinality": "[0..*]"
+            }
+          }
+        }
+      }
+    }
+  },
+  "segmentFields": {
+    "MSH":  [
+      {
+        "fieldNumber": 1,
+        "name": "File Separator",
+        "dataType": "ST",
+        "maxLength": "1",
+        "usage": "R",
+        "cardinality": "[1..1]",
+        "conformance": "|",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 2,
+        "name": "Encoding Characters",
+        "dataType": "ST",
+        "maxLength": "4",
+        "usage": "R",
+        "cardinality": "[1..1]",
+        "conformance": "^~\\&",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 3,
+        "name": "Sending Application",
+        "dataType": "HD",
+        "maxLength": "227",
+        "usage": "O",
+        "cardinality": "[1..1]",
+        "conformance": "",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 4,
+        "name": "Sending Facility",
+        "dataType": "HD",
+        "maxLength": "227",
+        "usage": "O",
+        "cardinality": "[1..1]",
+        "conformance": "",
+        "notes": ""
+      },
+      {
+        "fieldNumber": 5,
+        "name": "Receiving Application",
+        "dataType": "HD",
+        "maxLength": "227",
+        "usage": "O",
+        "cardinality": "[1..1]",
+        "conformance": "",
+        "notes": ""
+      },
+   ...
+```
+For each of the segments listed in segmentDefinition, the entries in segmentFields delineate which fields 
+should be output. Each entry includes the following data points:
+- *fieldNumber*: the position of the field within the segment.
+- *name*: the name that should appear as the key in the output. The name will be
+normalized to lowercase and spaces will be replaced with underscores.
+- *dataType*: the code used here should correspond to the data type whose details are defined
+in the second configuration file.
+- *maxLength*: the maximum length of the value. Reserved for future use.
+- *usage*: the HL7 usage code describing whether this field is required ("R", "O", "RE", etc.).
+- *cardinality*: defines whether this is a single-value field or, 
+if the second number is greater than 1 or is * (unlimited), a multi-value field. 
+Multi-value fields appear as arrays in the output.
+- *conformance*: reserved for future use and may be empty
+- *notes*: any notes to the implementer or future developers that may be helpful can 
+be included here.  
+ 
+Full sample configuration files can be found in the src/test/resources folder in this repository.
+
+2. HL7 data types
+
+The second configuration file needed by HL7JsonTransformer is one that describes the details of each HL7 data type that is referenced in the first configuration file. 
+This detail is needed in order to encode into JSON the data elements that are complex, i.e., that have components as opposed to a simple string or integer value.
+
+This file contains a single "segmentFields" node with a child for each data type. 
+The details included for each component of the data type are the same as those listed above
+for the fields, but in this case, "fieldNumber" refers to the component position. 
+An example of the "HD" data type definition is shown below.
+This example is drawn from the file "DefaultFieldsProfileSimple.json", which is the 
+default configuration file if none is provided and can be located in src/test/resources in this repository:
+```json
+{
+    "segmentFields": {
+        "HD" : [
+            {
+                "fieldNumber": 1,
+                "name": "Namespace ID",
+                "dataType": "IS",
+                "maxLength": "20",
+                "usage": "RE",
+                "cardinality": "[0..1]",
+                "conformance": "",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 2,
+                "name": "Universal ID",
+                "dataType": "ST",
+                "maxLength": "199",
+                "usage": "R",
+                "cardinality": "[1..1]",
+                "conformance": "REGEX:<<OID>>",
+                "notes": ""
+            },
+            {
+                "fieldNumber": 3,
+                "name": "Universal ID Type",
+                "dataType": "ID",
+                "maxLength": "6",
+                "usage": "R",
+                "cardinality": "[1..1]",
+                "conformance": "ISO",
+                "notes": ""
+            }
+        ],
+        "MSG": [
+            {
+                "fieldNumber": 1,
+           ...
+```
+
+#### Methods
+The HL7JsonTransformer should be instantiated using the factory method "getTransformerWithResource",
+which takes three parameters: the HL7 message (String), the path to the message profile configuration 
+file (String), and the path to the data types configuration file (String).
+
+Once instantiated, simply call "transformMessage()" to return the output JSON.
+
+```kotlin
+        val transformer = HL7JsonTransformer.getTransformerWithResource(message,
+            "PhinProfile.json",
+            "DefaultFieldsProfileSimple.json")
+        val fullHL7 = transformer.transformMessage()
+```
+
+### TemplateTransformer
+The TemplateTransformer also requires two configuration files, but they are different from those used by 
+HL7JsonTransformer. The TemplateTransformer needs a profile that specifies the segment order and relationships 
+in the inbound message and a JSON template of the output format.
+
+#### Configuration Files
 HL7 message profile
-HL7 data types profile
+JSON output template
+
+#### Methods
+
+
 
 ## Dependencies
 This library has a dependency on another CDC DEX HL7 library, hl7-pet. The hl7-pet library is available through Maven Central or the public GitHub repository at https://github.com/CDCgov/hl7-pet.
 
-To achieve these goals, the library uses configuration files to determine the input and output structures.
 
 ## Related documents
 
