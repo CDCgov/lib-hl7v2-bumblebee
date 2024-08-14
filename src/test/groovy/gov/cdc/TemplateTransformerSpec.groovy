@@ -58,14 +58,13 @@ class TemplateTransformerSpec extends Specification {
             assert object.OBR[1].question.code == "35659-2"
             assert object.OBR[1].question.label == "Age at specimen collection"
             assert object.OBR[1].answer == "^7"
-//            assert object.emptyValue == ""
     }
 
     def "transforming single template"() {
         when:
         def bumblebee = TemplateTransformer.getTransformerWithResource("/simpleTemplate.json", "/BasicProfile.json")
         def message = getClass().getResource("/exampleHL7Message.txt").text
-        def newMessage = bumblebee.transformMessage(message, "DONT")
+        def newMessage = bumblebee.transformMessage(message)
         println("simpleTemplate")
         println("===============================")
         println(newMessage)

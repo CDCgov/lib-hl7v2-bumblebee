@@ -36,8 +36,6 @@ class HL7JsonTransformer(private val profile: Profile, private val fieldProfile:
         }
     }
 
-
-
     fun transformMessage(): JsonObject {
         val fullHL7 = JsonObject()
         val msg = hl7Parser.msgHierarchy()

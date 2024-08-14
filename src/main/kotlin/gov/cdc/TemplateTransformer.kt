@@ -12,11 +12,11 @@ class TemplateTransformer(private val template: JsonObject, private val profile:
         //Factory Method
         @JvmStatic
         fun getTransformerWithResource(configFileName: String, profileFileName: String): TemplateTransformer {
-            val templateFile = TemplateTransformer::class.java.getResource(configFileName).readText()
+            val templateFile = loadContent(configFileName)
             val jsonbody = JsonParser.parseString(templateFile).asJsonObject
             val mapper = ObjectMapper()
             mapper.registerModule(DefaultScalaModule())
-            val profileFile = TemplateTransformer::class.java.getResource(profileFileName).readText()
+            val profileFile = loadContent(profileFileName)
             val profileObj = mapper.readValue(profileFile, Profile::class.java)
             return TemplateTransformer(jsonbody, profileObj)
         }
@@ -30,8 +30,20 @@ class TemplateTransformer(private val template: JsonObject, private val profile:
             return TemplateTransformer(jsonbody, profileObj)
 
         }
+        private fun loadContent(filePath: String) : String {
+            val pathToContent = if (filePath.startsWith("/")) {
+                filePath.substringAfter("/")
+            } else {
+                filePath
+            }
+            return TemplateTransformer::class.java.getResource("/$pathToContent").readText()
+        }
         val INDEXED_VALUE = "\\(([0-9]+)\\)$".toRegex()
         const val DO_NOT_CONCATENATE = "DONT"
+    }
+
+    fun transformMessage(hl7Message:String) : String {
+        return transformMessage(hl7Message, DO_NOT_CONCATENATE)
     }
 
     fun transformMessage(hl7Message: String, concatArrayElements: String = DO_NOT_CONCATENATE): String {
@@ -78,7 +90,7 @@ class TemplateTransformer(private val template: JsonObject, private val profile:
         if (elem.isJsonObject) {
             (elem as JsonObject).entrySet().map { prop -> navigateJson(hl7Message, prop.value, elem, "$path`${prop.key}", prop.key, (copyDoc as JsonObject).get(prop.key), copyDoc, concatArrayElements) }
         } else if (elem.isJsonArray) {
-            val map = mutableMapOf<String, Array<out Array<String>>?>() //Array<out Array<String>>?>
+            val map = mutableMapOf<String, Array<out Array<String>>?>()
             processArray(elem as JsonArray, map, hl7Message, path)
             val newArray = createNewJsonArray(hl7Message, map, attr)
             if (copyDocParent is JsonObject) {
