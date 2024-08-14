@@ -678,7 +678,7 @@ And here is an example of the output produced, using the configuration template 
 ## Build
 The project can be built using Maven build tools:
 
-`mvn:package -f pom.xml`
+`mvn package -f pom.xml`
 
 Alternatively, a release version will soon be available in Maven Central.
 
