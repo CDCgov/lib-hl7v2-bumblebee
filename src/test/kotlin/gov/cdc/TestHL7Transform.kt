@@ -21,7 +21,16 @@ class TestHL7Transform {
             .get("receiving_facility").asJsonObject
             .get("namespace_id").asString == "NCIRD-VPD")
     }
-
+    @Test
+    fun testHL7TransformerGenerated() {
+        val message = this::class.java.getResource("/COVID.txt").readText()
+        val gson = GsonBuilder().create()
+        val xformer = HL7JsonTransformer.getTransformerWithResource(message,
+            "profile-covid19_elr_v2_5_new.json",
+            "fields-covid19_elr_v2_5_new.json")
+        val fullHL7 = xformer.transformMessage()
+        println(gson.toJson(fullHL7))
+    }
 
     @Test
     fun loadFieldDef() {
