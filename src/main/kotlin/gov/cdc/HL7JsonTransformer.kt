@@ -5,11 +5,21 @@ import gov.cdc.hl7.HL7ParseUtils
 import gov.cdc.StringUtils.Companion.normalize
 import gov.cdc.hl7.model.HL7Hierarchy
 
-
+/**
+ * Class to perform transformation from HL7 v.2.x to JSON tree using HL7 segment-field hierarchy.
+ */
 class HL7JsonTransformer(private val profile: Profile, private val fieldProfile: Profile, private val hl7Parser: HL7ParseUtils) {
     companion object {
         private val gson: Gson = GsonBuilder().serializeNulls().create()
         //Factory Method
+        /**
+         * Factory method that returns an HL7JsonTransformer instance.
+         * It is recommended to use this factory method instead of the constructor.
+         * @param message HL7 v.2.x content as string
+         * @param profileFilename name of profile JSON file in resources folder
+         * @param fieldProfileFileName name of fields JSON file in resources folder
+         * @return instance of HL7JsonTransformer class
+         */
         @JvmStatic
         fun getTransformerWithResource(
             message: String,
@@ -36,6 +46,11 @@ class HL7JsonTransformer(private val profile: Profile, private val fieldProfile:
         }
     }
 
+    /**
+     * Transforms the HL7 v.2.x message into a JSON tree using segment and field names
+     * as the keys.
+     * @return a JSON object
+     */
     fun transformMessage(): JsonObject {
         val fullHL7 = JsonObject()
         val msg = hl7Parser.msgHierarchy()
