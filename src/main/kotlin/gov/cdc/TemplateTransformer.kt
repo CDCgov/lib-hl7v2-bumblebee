@@ -6,10 +6,18 @@ import com.google.gson.*
 import gov.cdc.hl7.HL7ParseUtils
 import gov.cdc.hl7.model.Profile
 
-
+/**
+ * Class to perform transformation from HL7 v.2.x to custom JSON tree based on a JSON template.
+ */
 class TemplateTransformer(private val template: JsonObject, private val profile: Profile) {
     companion object {
-        //Factory Method
+        /**
+         * Factory method that returns an instance of TemplateTransformer.
+         * Recommended over the use of the constructor for obtaining a class instance.
+         * @param configFileName Name of resource file that contains HL7 parsing information
+         * @param profileFileName Name of resource file that is the JSON output template
+         * @return instance of TemplateTransformer
+         */
         @JvmStatic
         fun getTransformerWithResource(configFileName: String, profileFileName: String): TemplateTransformer {
             val templateFile = loadContent(configFileName)
@@ -20,6 +28,14 @@ class TemplateTransformer(private val template: JsonObject, private val profile:
             val profileObj = mapper.readValue(profileFile, Profile::class.java)
             return TemplateTransformer(jsonbody, profileObj)
         }
+
+        /**
+         * Factory method that returns an instance of TemplateTransformer.
+         * Recommended over the use of the constructor for obtaining a class instance.
+         * @param template the JSON template contents as String
+         * @param profile the HL7 profile as String
+         * @return an instance of TemplateTransformer
+         */
         @JvmStatic
         fun getTransformerWithContent(template: String, profile: String): TemplateTransformer {
             val jsonbody = JsonParser.parseString(template).asJsonObject
@@ -42,10 +58,22 @@ class TemplateTransformer(private val template: JsonObject, private val profile:
         const val DO_NOT_CONCATENATE = "DONT"
     }
 
+    /**
+     * Transforms HL7 message to custom JSON format using the default of presenting repeating values as an array
+     * @param hl7Message contents of HL7 message as String
+     * @return String of JSON data
+     */
     fun transformMessage(hl7Message:String) : String {
         return transformMessage(hl7Message, DO_NOT_CONCATENATE)
     }
 
+    /**
+     * Transforms HL7 message to custom JSON format
+     * @param hl7Message contents of HL7 message as String
+     * @param concatArrayElements optional parameter specifying the delimiter to use when concatenating repeating values.
+     * If not supplied, repeating values are presented as an array.
+     * @return String of JSON data
+     */
     fun transformMessage(hl7Message: String, concatArrayElements: String = DO_NOT_CONCATENATE): String {
         val hl7Parser = HL7ParseUtils(hl7Message, profile)
         val copyDoc = template.deepCopy()
