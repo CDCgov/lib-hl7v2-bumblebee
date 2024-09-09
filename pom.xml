@@ -79,7 +79,7 @@
     </dependencyManagement>
     <dependencies>
         <dependency>
-            <groupId>gov.cdc.hl7</groupId>
+            <groupId>gov.cdc</groupId>
             <artifactId>hl7-pet_2.13</artifactId>
             <version>1.2.10</version>
         </dependency>
