@@ -20,10 +20,10 @@ jobs:
           cache: maven
           
       - name: Publish Package -lib-bumblebee
-        run: mvn -DskipTests -Dgpg.skip=true -B package
+        run: mvn -DskipTests -Dgpg.skip=true -DskipPublishing=true -B package
 
       - name: Publish package to github Repo
-        run: mvn -DskipTests -Dgpg.skip=true -B clean deploy --settings .github/workflows/github-settings.xml
+        run: mvn -DskipTests -Dgpg.skip=true -DskipPublishing=true -B clean deploy --settings .github/workflows/github-settings.xml
         env:
           LIB_GITHUB_ACTOR: '${{ secrets.LIB_GITHUB_ACTOR }}'
           LIB_GITHUB_TOKEN: '${{ secrets.LIB_GITHUB_TOKEN }}'
