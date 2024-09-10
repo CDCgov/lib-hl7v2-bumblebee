@@ -19,11 +19,11 @@ jobs:
           distribution: temurin
           cache: maven
           
-      - name: Publish Package - lib-bumblebee
+      - name: Publish Package -lib-bumblebee
         run: mvn -DskipTests -B package
 
       - name: Publish package to github Repo
-        run: mvn -DskipTests -B clean deploy --settings .github/workflows/mvn-settings.xml
+        run: mvn -DskipTests -B clean deploy --settings .github/workflows/github-settings.xml
         env:
           LIB_GITHUB_ACTOR: '${{ secrets.LIB_GITHUB_ACTOR }}'
           LIB_GITHUB_TOKEN: '${{ secrets.LIB_GITHUB_TOKEN }}'
