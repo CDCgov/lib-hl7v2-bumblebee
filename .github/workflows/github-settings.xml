@@ -5,9 +5,5 @@
       <username>${env.LIB_GITHUB_ACTOR}</username>
       <password>${env.LIB_GITHUB_TOKEN}</password>
     </server>
-    <server>
-      <id>gpg.passphrase</id>
-      <passphrase>${env.GPG_PASSPHRASE}</passphrase>
-    </server>
   </servers>
 </settings>

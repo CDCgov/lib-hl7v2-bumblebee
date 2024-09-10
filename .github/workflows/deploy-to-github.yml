@@ -18,24 +18,12 @@ jobs:
           java-version: '17'
           distribution: temurin
           cache: maven
-      - name: Decrypt and Import GPG Key
-        run: |
-          gpgconf --kill gpg-agent || true
-
-          gpgconf --launch gpg-agent || true
-     
-          echo "$GPG_PRIVATE_KEY" | gpg --batch --no-tty --import
-
-        env:
-          GPG_PRIVATE_KEY: '${{ secrets.GPG_PRIVATE_KEY }}'
-          GPG_PASSPHRASE: '${{ secrets.GPG_PASSPHRASE }}' 
-
+ 
       - name: Publish Package -lib-bumblebee
         run: mvn -DskipTests -B package
 
       - name: Publish package to github Repo
         run: mvn -DskipTests -B clean deploy --settings .github/workflows/github-settings.xml
         env:
-          GPG_PASSPHRASE: '${{ secrets.GPG_PASSPHRASE }}'
           LIB_GITHUB_ACTOR: '${{ secrets.LIB_GITHUB_ACTOR }}'
           LIB_GITHUB_TOKEN: '${{ secrets.LIB_GITHUB_TOKEN }}'
