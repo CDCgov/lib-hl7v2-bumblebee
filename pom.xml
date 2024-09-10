@@ -7,7 +7,7 @@
     <artifactId>lib-hl7v2-bumblebee</artifactId>
     <name>lib-hl7v2-bumblebee</name>
     <description>A library for transforming HL7 v.2.x messages into JSON.</description>
-    <version>1.3.3</version>
+    <version>1.3.4</version>
     <packaging>jar</packaging>
     <url>https://github.com/CDCgov/lib-hl7v2-bumblebee</url>
     <licenses>
