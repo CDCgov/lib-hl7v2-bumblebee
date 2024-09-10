@@ -23,7 +23,7 @@ jobs:
         run: mvn -B package
 
       - name: Publish package to github Repo
-        run: mvn -DskipTests clean deploy --settings .github/workflows/mvn-settings.xml
+        run: mvn -DskipTests -B clean deploy --settings .github/workflows/mvn-settings.xml
         env:
           LIB_GITHUB_ACTOR: '${{ secrets.LIB_GITHUB_ACTOR }}'
           LIB_GITHUB_TOKEN: '${{ secrets.LIB_GITHUB_TOKEN }}'
