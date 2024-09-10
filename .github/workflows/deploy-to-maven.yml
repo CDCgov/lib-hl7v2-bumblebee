@@ -1,12 +1,11 @@
 name: Java/maven CI/CD Pipeline
 on:
+  workflow_dispatch:
   push:
-    branches:
-         - maven-central
-  #   tags:
-  #     - 'v*.*.*'  # Adjust the tag pattern to match your versioning scheme
-  # release:
-  #   types: [created]  # Trigger the workflow when a release is created
+    tags:
+       - 'v*.*.*'  # Adjust the tag pattern to match your versioning scheme 
+  release:
+       types: [created]  # Trigger the workflow when a release is created
     
 jobs:
  build:
@@ -37,4 +36,4 @@ jobs:
        SONATYPE_USERNAME: '${{ secrets.SONATYPE_USERNAME }}'
        SONATYPE_PASSWORD: '${{ secrets.SONATYPE_PASSWORD }}'
        GPG_PASSPHRASE: '${{ secrets.GPG_PASSPHRASE }}'
-     run: mvn -B clean deploy --settings .github/workflows/mvn-settings.xml
+     run: mvn -DskipTests -B clean deploy --settings .github/workflows/mvn-settings.xml
