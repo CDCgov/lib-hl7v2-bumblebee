@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - main
+      - maven-central
 jobs:
   publish:
     runs-on: ubuntu-latest
