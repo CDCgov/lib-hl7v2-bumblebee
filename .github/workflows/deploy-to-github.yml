@@ -19,8 +19,8 @@ jobs:
           distribution: temurin
           cache: maven
           
-      - name: Publish Package - lib-hl7v2-nist
-        run: mvn -B package
+      - name: Publish Package - lib-bumblebee
+        run: mvn -DskipTests -B package
 
       - name: Publish package to github Repo
         run: mvn -DskipTests -B clean deploy --settings .github/workflows/mvn-settings.xml
