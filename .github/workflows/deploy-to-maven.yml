@@ -1,12 +1,11 @@
 name: Java/maven CI/CD Pipeline
 on:
+  workflow_dispatch:
   push:
-    branches:
-         - maven-central
-  #   tags:
-  #     - 'v*.*.*'  # Adjust the tag pattern to match your versioning scheme
-  # release:
-  #   types: [created]  # Trigger the workflow when a release is created
+    tags:
+       - 'v*.*.*'  # Adjust the tag pattern to match your versioning scheme 
+  release:
+       types: [created]  # Trigger the workflow when a release is created
     
 jobs:
  build:
